@@ -18,43 +18,46 @@ namespace lesson2c1
 
         enum Weekday
         {
-            Monday = 0b_1000000,
-            Tuesday = 0b_0100000,
-            Wednesday = 0b_0010000,
-            Thursday = 0b_0001000,
-            Friday = 0b_0000100,
-            Saturday = 0b_0000010,
-            Sunday = 0b_0000001
+            Monday = 1,
+            Tuesday = 2,
+            Wednesday = 4,
+            Thursday = 8,
+            Friday = 16,
+            Saturday = 32,
+            Sunday = 64
         }
         static void Main(string[] args)
         {
             //Вывод заголовка
-            Console.Write("".PadRight(15, ' '));
-            foreach (string subject in Enum.GetNames(typeof(Schedule)))
-            {
-                Console.Write(subject.PadRight(14, ' ') + " ");
-            }
+            Console.Clear();
             Console.WriteLine();
+            Console.WriteLine("STUDY SCHEDULE \n".PadLeft(70,' '));
+            Console.Write("    Subject  |".PadRight(15, ' '));
+            foreach (string day in Enum.GetNames(typeof(Weekday)))
+            {
+                Console.Write("   "+day.PadRight(10, ' ') + "|");
+            }
+            Console.WriteLine("\n".PadRight(114,'-'));
 
             //Вывод строк
-            foreach (Weekday wd in Enum.GetValues(typeof(Weekday)))
+            foreach (Schedule subject in Enum.GetValues(typeof(Schedule)))
             {
-                Console.Write(wd.ToString().PadLeft(12, ' '));
-                foreach (Schedule day in Enum.GetValues(typeof(Schedule)))
+                Console.Write(subject.ToString().PadLeft(12, ' ')+" | ");
+                foreach (Schedule day in Enum.GetValues(typeof(Weekday)))
                 {
                     byte byteDay = (byte)day;
-                    byte byteWD = (byte)wd;
+                    byte byteWD = (byte)subject;
                     if ((byteDay & byteWD) > 0)
                     {
-                        Console.Write("1".PadLeft(3, ' ').PadRight(15, ' '));
+                        Console.Write("lesson".PadLeft(8, ' ').PadRight(13, ' ')+"|");
                     }
                     else
                     {
-                        Console.Write(" ".PadRight(15, ' '));
+                        Console.Write(" ".PadRight(13, ' ')+"|");
                     }
 
                 }
-                Console.WriteLine();
+                Console.WriteLine("\n".PadRight(114,'-'));
             }
             Console.ReadKey();
         }
