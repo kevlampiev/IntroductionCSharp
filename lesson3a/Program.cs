@@ -66,6 +66,7 @@ namespace lesson3a
         //Задание 2. Вспомогательная функция добавления элемента в справочник
         public static string[,] addElement(string[,] phoneBook) 
         {
+            
             Console.WriteLine();
             Console.WriteLine("Enter a name: ");
             string name = Console.ReadLine();
@@ -85,7 +86,7 @@ namespace lesson3a
         }
 
         //Задание 2. Телефонный справочник. Общая функция
-        static void task2() 
+        public static void task2() 
         {
             string[,] phoneBook = { {"Alex", "111-1111" },
                                     { "Brendon", "222-2222"},
@@ -107,8 +108,8 @@ namespace lesson3a
         
         }
 
-
-        static void task3() 
+        //Задание 3. Написать слово "Hello ... " в обратном порядке
+        public static void task3() 
         {
             string someString = "Hello from task 3!";
             string reversString = "";
@@ -120,6 +121,51 @@ namespace lesson3a
         }
 
 
+        //Задание 4. Вспомогательная функция генерации доски
+        public static char[,] getBattleField(int axisSize = 10) 
+        { 
+            char[,] battleField = new char[axisSize, axisSize];
+            for (int i = 0; i < axisSize; i++) {
+                for (int j = 0; j < axisSize; j++) {
+                    battleField[i, j] = '.';
+                }
+            }
+            return battleField;
+        }
+
+        //Задание 4. Вспомогательная функция отрисовки доски
+        public static void drawBattlefield(char[,] battlefield, byte[][,] warships) 
+        {
+            string letters = "ABCDEFGHIJKLMN0PQRSTUVWXYZ";
+
+
+            //заголовок
+            Console.WriteLine("== Sea battle ==");
+            Console.Write(" ");
+            for (int i = 0; i < battlefield.GetLength(0); i++) 
+            { 
+                Console.Write(" "+letters[i]);
+            }
+            Console.WriteLine();
+
+            //Основное поле
+            for (int i = 0; i < battlefield.GetLength(1); i++) {
+                Console.Write($"{i}".PadLeft(2,' '));
+                for (int j = 0; j < battlefield.GetLength(0); j++) 
+                {
+                    Console.Write(" "+battlefield[i, j]);
+                }
+                Console.WriteLine();
+            }
+        }
+
+        //Задание 4. Расставить корабли по клеткам игры "Морской бой". Общая функция
+        public static void task4(int axisSize=10) 
+        { 
+            char [,] battleField = getBattleField();
+            drawBattlefield(battleField, null);
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Task #1 \n =========================================================");
@@ -128,6 +174,8 @@ namespace lesson3a
             task2();
             Console.WriteLine("Task #3 \n =========================================================");
             task3();
+            Console.WriteLine("Task #4 \n =========================================================");
+            task4();
             Console.ReadKey();
 
         }
