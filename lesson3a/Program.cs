@@ -8,7 +8,7 @@ namespace lesson3a
 {
     internal class Program
     {
-        
+        //Задача 1. Вспомогательная функция для генерации матрицы псевдослучайных чисел
         static int[,] GenerateMatrix(byte rows, byte cols)
         { 
             Random random = new Random();
@@ -21,6 +21,7 @@ namespace lesson3a
             return array;
         }
 
+        //Задача 1. Вспомогательная функция для печати матрицы
         static void PrintMatrix(int[,] array) 
         {
             for (int i = 0; i < array.GetLength(0); i++) { 
@@ -32,6 +33,7 @@ namespace lesson3a
             }
         }
 
+        //Задача 1. Вывод диагональных элементов матрицы. Общая функция
         static void task1() 
         {
             byte rows = 4;
@@ -48,11 +50,12 @@ namespace lesson3a
 
         }
 
-        //Задание 2. Вывод справочника на экран
+        //Задание 2. Вспомогательная функция вывода справочника на экран
         public static void printPhoneBook(string[,] phoneBook) 
         {
+            Console.WriteLine();
             for (int i = 0; i < phoneBook.GetLength(0); i++) {
-                Console.Write(i);
+                Console.Write(i+1);
                 for (int j = 0; j < phoneBook.GetLength(1); j++) {
                     Console.Write(phoneBook[i, j].PadLeft(20, ' '));
                 }
@@ -60,9 +63,10 @@ namespace lesson3a
             }
         }
 
-        //Задание 2. Добавление элемента в справочник
+        //Задание 2. Вспомогательная функция добавления элемента в справочник
         public static string[,] addElement(string[,] phoneBook) 
         {
+            Console.WriteLine();
             Console.WriteLine("Enter a name: ");
             string name = Console.ReadLine();
             Console.WriteLine("Enter a phone number: ");
@@ -80,7 +84,7 @@ namespace lesson3a
             return newArray;
         }
 
-        //Задание 2. Телефонный справочник
+        //Задание 2. Телефонный справочник. Общая функция
         static void task2() 
         {
             string[,] phoneBook = { {"Alex", "111-1111" },
@@ -103,13 +107,29 @@ namespace lesson3a
         
         }
 
+
+        static void task3() 
+        {
+            string someString = "Hello from task 3!";
+            string reversString = "";
+            for (int i = someString.Length-1; i >= 0; i--)
+            {
+                reversString += someString[i];
+            }
+            Console.WriteLine($"{someString}  =>  {reversString}");
+        }
+
+
         static void Main(string[] args)
         {
             Console.WriteLine("Task #1 \n =========================================================");
             task1();
             Console.WriteLine("Task #2 \n =========================================================");
             task2();
-            
+            Console.WriteLine("Task #3 \n =========================================================");
+            task3();
+            Console.ReadKey();
+
         }
     }
 }
