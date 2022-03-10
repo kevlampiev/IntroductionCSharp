@@ -133,6 +133,14 @@ namespace lesson3a
             return battleField;
         }
 
+        //Задание 4. Вспомогательная функция генерации флота
+        public static byte[][] getWarships(int axisSize = 10)
+        {
+            byte[][] warhips = new byte[10][]; //Вроде, 10 кораблей должно быть
+           
+            return warhips;
+        }
+
         //Задание 4. Вспомогательная функция отрисовки доски
         public static void drawBattlefield(char[,] battlefield, byte[][,] warships) 
         {
