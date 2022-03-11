@@ -2,12 +2,14 @@
 
 namespace lesson3a
 {
+    //перечисление для задания 4 (морской бой)
     internal enum ShipPlacementDirection
     {
         vertical,
         horisontal
     }
 
+    //Структура для задания 4 (морской бой)
     internal struct Warship
     {
         public int colStart;
@@ -131,8 +133,8 @@ namespace lesson3a
         }
 
 
-        //Задание 4. Вспомогательная функция которая проверяет влезает ли корабль с заданными характеристиками в доску
-
+        //Задание 4. Вспомогательная функция которая проверяет влезает ли корабль с заданными характеристиками в игровое поле
+        //принята следующая маркировка клеток 0 - свободная, 1 - рядом стоит корабль, 2 -занято кораблем
         public static bool doesShipFit(byte[,] battlefield, Warship warship)
         {
             var axisSize = Math.Min(battlefield.GetLength(0), battlefield.GetLength(1));
