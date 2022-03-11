@@ -6,8 +6,23 @@ using System.Threading.Tasks;
 
 namespace lesson3a
 {
+    enum ShipPlacementDirection : { vertical, horisontal };
+
+    struct Warship { 
+        public int colStart;
+        public int rowStart;
+        public int deckSize;
+        public ShipPlacementDirection direction;
+        public int colEnd() { return colStart + deckSize*Convert.ToByte(direction == ShipPlacementDirection.horisontal); }
+        public int rowEnd() { return rowStart + deckSize * Convert.ToByte(direction == ShipPlacementDirection.vertical); }
+        
+    }
+
+
     internal class Program
     {
+       
+
         //Задача 1. Вспомогательная функция для генерации матрицы псевдослучайных чисел
         static int[,] GenerateMatrix(byte rows, byte cols)
         { 
@@ -121,51 +136,70 @@ namespace lesson3a
         }
 
 
-        //Задание 4. Вспомогательная функция которая проверяет влезает ли характер с заданными характеристиками в доску
+        //Задание 4. Вспомогательная функция которая проверяет влезает ли корабль с заданными характеристиками в доску
 
-        public static bool doesShipFit(byte[,] battlefield, int col, int row, int deck, bool direction) 
+        public static bool doesShipFit(byte[,] battlefield, Warship warship) 
         {
             int axisSize =Math.Min(battlefield.GetLength(0), battlefield.GetLength(1));
-            //Если корабль вылезает за поле - сразу говорим что не вписывается
-            int col0 = Math.Max(col -1,0);
-            int colM = col0 + deck * Convert.ToByte(direction)+1;
-            if (colM > battlefield.GetLength(0)) return false;
-
-            int row0 = Math.Max(row - 1, 0);
-            int rowM = row0 + deck * Convert.ToByte(!direction) +1;
-            if (colM > battlefield.GetLength(0)) return false;
+            
+            //Если корабль вылезает за поле - сразу говорим что не вписывается. В принципе, лишняя проверка, но все может быть
+            if (warship.colEnd() >= battlefield.GetLength(0)) return false;
+            if (warship.rowEnd() >= battlefield.GetLength(1)) return false;
 
             //если корабль влезает в поле - смотрим, не мещает ли его расположение расположениям уже вписаных кораблей
-
-            for (int i = col0; i < colM; i++) {
-                for (int j = row0; j < rowM; j++) { 
-                    if (battlefield[i,j] != 0) return false;
+            if (warship.direction == ShipPlacementDirection.horisontal) { 
+                for (int i = warship.colStart; i <= warship.colEnd(); i++) { 
+                    if (battlefield[i,warship.rowStart]!=0) return false;
+                }
+            } else {
+                for (int i = warship.rowStart; i <= warship.rowEnd(); i++)
+                {
+                    if (battlefield[warship.col, i] != 0) return false;
                 }
             }
-
+            //если не выбило до сих пор, то корабль вписывается
             return true;
         }
 
+        //Возвращает случайно сгенерированный корабль, который может перекрываться с другими кораблями, но укладывается внутри доски
+        public static Warship getRandWarship(byte[,] battlefield, int deckSize)
+        {
+            Random r=new Random();
+            int axisSize = Math.Min(battlefield.GetLength(0), battlefield.GetLength(1));
+            ShipPlacementDirection direction = (ShipPlacementDirection)r.Next(0, 1);
+            int startRow = r.Next(0, axisSize - Convert.ToByte(direction == ShipPlacementDirection.vertical) * deckSize -1); //случайная стартовая позиция по строкам 
+            int startCol = r.Next(0, axisSize - Convert.ToByte(direction == ShipPlacementDirection.horisontal) * deckSize -1); //случайная стартовая позиция по колонкам
+            
+            
+            return new Warship { colStart=startCol, rowStart = startRow, deckSize = deckSize, direction = direction};
+        }
+
+        //Находит случайную точку, куда можно вписать корабль дниной deckSize за maxIterations итераций
+        public static Warship getWarshipPos(byte[,] battlefield, int deckSize, int maxIterations=100) 
+        {
+            int iteration = 0;
+            bool success = false; 
+            Warship warship = getRandWarship(battlefield, deckSize);
+            while (iteration<maxIterations) { 
+                warship = getRandWarship(battlefield, deckSize);
+                if (doesShipFit(battlefield, warship)) {
+                    success = true;
+                    break;
+                }    
+                iteration++;
+            }
+            if (success) return warship;
+            else return new Warship() { colStart = 0, rowStart= 0, deckSize=0};
+        }
+
+
 
         //Задание 4. Вспомогательная функция установки корабля с длиной палубы deck 
-        public static bool addWarchip(ref byte[,] battlefield, int deck) 
+        public static bool addWarcsip(ref byte[,] battlefield, int deck) 
         {
-            bool direction = (r.Next(100) > 50); //Для каждого корабля генерим случайную величину стартовой точки и направления true - вправо, false - вниз
-            int axisSize=Math.Min(battleship.GetLength(0),battleship.GetLength(1));
-            int startRow = r.Next(1, axisSize - Convert.ToByte(!direction) * deck); //случайная стартовая позиция по строкам 
-            int startCol = r.Next(1, axisSize - Convert.ToByte(direction) * deck); //случайная стартовая позиция по колонкам
-            //Пробуем наугад поставить корабль с этими характеристиками если нет, смещаем корабль по колонкам на 1 позицию или по строкам на 1 позицию и снова проверяем
-            while (!doesShipFit(battlefield, startCol, startRow, deck, direction)) {
-                startCol++;
-                if (startCol >= axisSize) {
-                    startCol = 0;
-                    startRow++;
-                    if (startRow >= axisSize) return false;
-                };
-            }
+            Warship warship = getWarshipPos(battlefield, deck, 100);
             
-            //определили куда можно вписать корабль (иначе бы вылетели), вписываем
-            for (int i)
+            
 
             return true;
         }
