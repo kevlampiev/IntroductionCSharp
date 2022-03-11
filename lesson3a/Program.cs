@@ -121,25 +121,88 @@ namespace lesson3a
         }
 
 
-        //Задание 4. Вспомогательная функция генерации доски
-        public static char[,] getBattleField(int axisSize = 10) 
+        //Задание 4. Вспомогательная функция которая проверяет влезает ли характер с заданными характеристиками в доску
+
+        public static bool doesShipFit(byte[,] battlefield, int col, int row, int deck, bool direction) 
+        {
+            int axisSize =Math.Min(battlefield.GetLength(0), battlefield.GetLength(1));
+            //Если корабль вылезает за поле - сразу говорим что не вписывается
+            int col0 = Math.Max(col -1,0);
+            int colM = col0 + deck * Convert.ToByte(direction)+1;
+            if (colM > battlefield.GetLength(0)) return false;
+
+            int row0 = Math.Max(row - 1, 0);
+            int rowM = row0 + deck * Convert.ToByte(!direction) +1;
+            if (colM > battlefield.GetLength(0)) return false;
+
+            //если корабль влезает в поле - смотрим, не мещает ли его расположение расположениям уже вписаных кораблей
+
+            for (int i = col0; i < colM; i++) {
+                for (int j = row0; j < rowM; j++) { 
+                    if (battlefield[i,j] != 0) return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        //Задание 4. Вспомогательная функция установки корабля с длиной палубы deck 
+        public static bool addWarchip(ref byte[,] battlefield, int deck) 
+        {
+            bool direction = (r.Next(100) > 50); //Для каждого корабля генерим случайную величину стартовой точки и направления true - вправо, false - вниз
+            int axisSize=Math.Min(battleship.GetLength(0),battleship.GetLength(1));
+            int startRow = r.Next(1, axisSize - Convert.ToByte(!direction) * deck); //случайная стартовая позиция по строкам 
+            int startCol = r.Next(1, axisSize - Convert.ToByte(direction) * deck); //случайная стартовая позиция по колонкам
+            //Пробуем наугад поставить корабль с этими характеристиками если нет, смещаем корабль по колонкам на 1 позицию или по строкам на 1 позицию и снова проверяем
+            while (!doesShipFit(battlefield, startCol, startRow, deck, direction)) {
+                startCol++;
+                if (startCol >= axisSize) {
+                    startCol = 0;
+                    startRow++;
+                    if (startRow >= axisSize) return false;
+                };
+            }
+            
+            //определили куда можно вписать корабль (иначе бы вылетели), вписываем
+            for (int i)
+
+            return true;
+        }
+
+        //Задание 4. Вспомогательная функция генерации доски и расстановки флота
+        public static byte[,] getBattleField(int axisSize = 10) 
         { 
             char[,] battleField = new char[axisSize, axisSize];
             for (int i = 0; i < axisSize; i++) {
                 for (int j = 0; j < axisSize; j++) {
-                    battleField[i, j] = '.';
+                    battleField[i, j] = '0';
                 }
             }
+            //расстановка флота. 
+            for (int deck = 4; deck > 0; deck--) {
+                Random r = new Random();
+                for (int i = 0; i <= 4-deck; i++)
+                {
+                    
+                    byte direction = Convert.ToByte(r.Next(100)>50);
+                    int startRow = r.Next(1, axisSize - direction * deck);
+                    int startCol = r.Next(1, axisSize - direction*deck);
+                    for (int k = 0; k < deck; k++) {
+                        int col=startCol+k*direction;
+                        int row=startRow+k*direction;
+                        battleField[row,col] = '2';
+
+
+                    }
+                }
+            }
+
+
             return battleField;
         }
 
-        //Задание 4. Вспомогательная функция генерации флота
-        public static byte[][] getWarships(int axisSize = 10)
-        {
-            byte[][] warhips = new byte[10][]; //Вроде, 10 кораблей должно быть
-           
-            return warhips;
-        }
+        
 
         //Задание 4. Вспомогательная функция отрисовки доски
         public static void drawBattlefield(char[,] battlefield, byte[][,] warships) 
