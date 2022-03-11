@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace lesson3a
 {
-    enum ShipPlacementDirection : { vertical, horisontal };
+    enum ShipPlacementDirection { vertical, horisontal };
 
     struct Warship { 
         public int colStart;
         public int rowStart;
         public int deckSize;
         public ShipPlacementDirection direction;
-        public int colEnd() { return colStart + deckSize*Convert.ToByte(direction == ShipPlacementDirection.horisontal); }
-        public int rowEnd() { return rowStart + deckSize * Convert.ToByte(direction == ShipPlacementDirection.vertical); }
+        public int colEnd() { return colStart + (deckSize-1) * Convert.ToByte(direction == ShipPlacementDirection.horisontal); }
+        public int rowEnd() { return rowStart + (deckSize-1) * Convert.ToByte(direction == ShipPlacementDirection.vertical); }
         
     }
 
@@ -154,7 +154,7 @@ namespace lesson3a
             } else {
                 for (int i = warship.rowStart; i <= warship.rowEnd(); i++)
                 {
-                    if (battlefield[warship.col, i] != 0) return false;
+                    if (battlefield[warship.colStart, i] != 0) return false;
                 }
             }
             //если не выбило до сих пор, то корабль вписывается
@@ -166,7 +166,7 @@ namespace lesson3a
         {
             Random r=new Random();
             int axisSize = Math.Min(battlefield.GetLength(0), battlefield.GetLength(1));
-            ShipPlacementDirection direction = (ShipPlacementDirection)r.Next(0, 1);
+            ShipPlacementDirection direction = (ShipPlacementDirection)Convert.ToByte(r.Next(0, 100) % 2 == 1);
             int startRow = r.Next(0, axisSize - Convert.ToByte(direction == ShipPlacementDirection.vertical) * deckSize -1); //случайная стартовая позиция по строкам 
             int startCol = r.Next(0, axisSize - Convert.ToByte(direction == ShipPlacementDirection.horisontal) * deckSize -1); //случайная стартовая позиция по колонкам
             
@@ -174,7 +174,7 @@ namespace lesson3a
             return new Warship { colStart=startCol, rowStart = startRow, deckSize = deckSize, direction = direction};
         }
 
-        //Находит случайную точку, куда можно вписать корабль дниной deckSize за maxIterations итераций
+        //Находит случайную точку, куда можно вписать корабль длиной deckSize за maxIterations итераций
         public static Warship getWarshipPos(byte[,] battlefield, int deckSize, int maxIterations=100) 
         {
             int iteration = 0;
@@ -195,51 +195,62 @@ namespace lesson3a
 
 
         //Задание 4. Вспомогательная функция установки корабля с длиной палубы deck 
-        public static bool addWarcsip(ref byte[,] battlefield, int deck) 
+        public static void addWarship(ref byte[,] battlefield, int deck) 
         {
             Warship warship = getWarshipPos(battlefield, deck, 100);
-            
-            
 
-            return true;
+            int c0 = Math.Max(warship.colStart-1,0);
+            int c1 = Math.Min(warship.colEnd()+1 , battlefield.GetLength(0) - 1);
+            int r0 = Math.Max(warship.rowStart-1,0);
+            int r1 = Math.Min(warship.rowEnd()+1 , battlefield.GetLength(1) - 1);
+
+            for (int i = c0; i <= c1; i++)
+            {
+                for (int j = r0; j <= r1; j++)
+                {
+                    battlefield[i, j] = 1;
+                }
+            }
+            
+            for (int i = warship.colStart; i <= warship.colEnd(); i++)
+            {
+                for (int j = warship.rowStart; j <= warship.rowEnd(); j++)
+                {
+                    battlefield[i, j] = 2;
+                }
+            }
         }
 
         //Задание 4. Вспомогательная функция генерации доски и расстановки флота
         public static byte[,] getBattleField(int axisSize = 10) 
         { 
-            char[,] battleField = new char[axisSize, axisSize];
+            byte[,] battleField = new byte[axisSize, axisSize];
             for (int i = 0; i < axisSize; i++) {
                 for (int j = 0; j < axisSize; j++) {
-                    battleField[i, j] = '0';
+                    battleField[i, j] = 0;
                 }
             }
             //расстановка флота. 
-            for (int deck = 4; deck > 0; deck--) {
-                Random r = new Random();
-                for (int i = 0; i <= 4-deck; i++)
+            
+            //Warship warship = getWarshipPos(battleField, 4);
+            for (int deck = 4; deck > 0; deck--)
+            {
+                for (int count = 4 - deck; count >= 0; count--)
                 {
-                    
-                    byte direction = Convert.ToByte(r.Next(100)>50);
-                    int startRow = r.Next(1, axisSize - direction * deck);
-                    int startCol = r.Next(1, axisSize - direction*deck);
-                    for (int k = 0; k < deck; k++) {
-                        int col=startCol+k*direction;
-                        int row=startRow+k*direction;
-                        battleField[row,col] = '2';
-
-
-                    }
+                    addWarship(ref battleField, deck);
                 }
             }
-
-
+            //
+            // addWarship(ref battleField, 4);
+            // addWarship(ref battleField, 3);
+    
             return battleField;
         }
 
         
 
         //Задание 4. Вспомогательная функция отрисовки доски
-        public static void drawBattlefield(char[,] battlefield, byte[][,] warships) 
+        public static void drawBattlefield(byte[,] battlefield) 
         {
             string letters = "ABCDEFGHIJKLMN0PQRSTUVWXYZ";
 
@@ -249,16 +260,29 @@ namespace lesson3a
             Console.Write(" ");
             for (int i = 0; i < battlefield.GetLength(0); i++) 
             { 
-                Console.Write(" "+letters[i]);
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write(" "+letters[i]+" ");
+                Console.ResetColor();
             }
             Console.WriteLine();
 
             //Основное поле
             for (int i = 0; i < battlefield.GetLength(1); i++) {
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.Write($"{i}".PadLeft(2,' '));
+                Console.ResetColor();
                 for (int j = 0; j < battlefield.GetLength(0); j++) 
                 {
-                    Console.Write(" "+battlefield[i, j]);
+                    if (battlefield[i, j] != 2)
+                    {
+                        Console.Write(" . ");    
+                    } else
+                    {
+                        Console.BackgroundColor = ConsoleColor.Green;
+                        Console.Write("   ");
+                        Console.ResetColor();
+                    }
+                    // Console.Write(" "+battlefield[i,j]);
                 }
                 Console.WriteLine();
             }
@@ -267,8 +291,8 @@ namespace lesson3a
         //Задание 4. Расставить корабли по клеткам игры "Морской бой". Общая функция
         public static void task4(int axisSize=10) 
         { 
-            char [,] battleField = getBattleField();
-            drawBattlefield(battleField, null);
+            byte [,] battleField = getBattleField();
+            drawBattlefield(battleField);
         }
 
         static void Main(string[] args)
