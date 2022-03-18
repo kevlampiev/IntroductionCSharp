@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32210.238
@@ -8,9 +8,7 @@ EndProject
 
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson2a", "lesson2a\lesson2a.csproj", "{ADC4FAFA-CA0B-48BA-B982-46A09CE82051}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lesson2b", "lesson2b\lesson2b.csproj", "{F42B82F9-84BE-4B72-8DBB-792A67402632}"
 
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,15 +19,11 @@ Global
 		{2ACA2980-EEF0-43F2-9282-1B5CECE83139}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2ACA2980-EEF0-43F2-9282-1B5CECE83139}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2ACA2980-EEF0-43F2-9282-1B5CECE83139}.Release|Any CPU.Build.0 = Release|Any CPU
-
 		{ADC4FAFA-CA0B-48BA-B982-46A09CE82051}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{ADC4FAFA-CA0B-48BA-B982-46A09CE82051}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADC4FAFA-CA0B-48BA-B982-46A09CE82051}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADC4FAFA-CA0B-48BA-B982-46A09CE82051}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F42B82F9-84BE-4B72-8DBB-792A67402632}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F42B82F9-84BE-4B72-8DBB-792A67402632}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F42B82F9-84BE-4B72-8DBB-792A67402632}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F42B82F9-84BE-4B72-8DBB-792A67402632}.Release|Any CPU.Build.0 = Release|Any CPU
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
