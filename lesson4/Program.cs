@@ -11,7 +11,7 @@ namespace lesson4
         enum Numbers { Five = 5}
 
         public enum Seasons { Winter, Spring, Summer, Autumn }
-        public string[] russianSeasons = { "Зима", "Весна", "Лето", "Осень" };
+        static string[] russianSeasons = { "Зима", "Весна", "Лето", "Осень" };
 
         static (string name, int age) GetClientInfo()
         {
@@ -136,15 +136,43 @@ namespace lesson4
             ShowTaskTitle("Задание 3");
             Console.WriteLine("Введине номер месяца от 1 до 12, где 1-Январь, 12 - Декабрь:");
             
-            Console.WriteLine(GetRusSeason(GetSeason, russianSeasons));
+            Console.WriteLine(GetRusSeason(GetSeason(), russianSeasons));
         }
 
+        //Задание 4. Вычислить число Фибоначи ркурсивно
+
+        public static int Fibonacci(int number)
+        {
+            if (number <= 0)
+            {
+                DisplayError($"Номер ряда {number} принципиально не определен ");
+                return 0;
+            } else if (number <= 2)
+            {
+                return 1;
+            }
+            else
+            {
+                return Fibonacci(number - 2) + Fibonacci(number - 1);
+            }
+        }
+        
+        //Задание 4. Основная функция
+        public static void Task4()
+        {
+            ShowTaskTitle("Задание 3");
+            for (int i = 1; i <= 10; i++)
+            {
+                Console.WriteLine($"Номер по порядку {i}. Значение числа ряда Фибоначчи {Fibonacci(i)}");
+            }
+        }
 
         static void Main(string[] args)
         {
-            //Task1();
-            //Task2();
+            Task1();
+            Task2();
             Task3();
+            Task4();
             Console.ReadKey  ();
 
 
