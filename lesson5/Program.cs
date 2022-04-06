@@ -11,12 +11,16 @@ namespace lesson5
               
         static void Main(string[] args)
         {
+            //Задача 1
             (new StringsWriter(1, "task5.1.txt")).Execute();
+            //Задача 2
             (new TimeWriter(2, "task5.2.txt")).Execute();
+            //Задача 3
             DigitsWriter dr = new DigitsWriter(3, "task5.3.dat");
             dr.Execute();
             dr.ShowDigitFile();
-
+            //Задача 4
+            (new DirectoryWriter(4, "directory.txt")).Execute();
             Console.ReadKey();
 
         }
