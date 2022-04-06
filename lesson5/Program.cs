@@ -21,6 +21,8 @@ namespace lesson5
             dr.ShowDigitFile();
             //Задача 4
             (new DirectoryWriter(4, "directory.txt")).Execute();
+            //Задача 5
+            (new TodoOrganizer.TodoOrganizer(5)).Execute();
             Console.ReadKey();
 
         }
