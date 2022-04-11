@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "lesson6": {
+      "commandName": "Project",
+      "commandLineArgs": "kill=\"notepad\""
+    }
+  }
+}

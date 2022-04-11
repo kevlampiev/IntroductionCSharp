@@ -11,12 +11,26 @@ namespace lesson6
     {
         static void Main(string[] args)
         {
-            Process[] processes = Process.GetProcesses();
-            int i=0;
-            foreach (Process process in processes) {
-                Int64 mem = process.VirtualMemorySize / (1024 * 1024);
-                Console.WriteLine($"{i++,3}  {process.Id,12}  {process.ProcessName,40}  {mem.ToString("0,0"), 18}M");
+            ProcessHandler handler = new ProcessHandler();
+            if (args.Length == 0)
+            {
+                handler.DisplayHelp();
+                return;
             }
+            
+            string[] arguments = args[0].Split('=');
+            switch (arguments[0]) {
+                    case "list": handler.DisplayProcesses(); break;
+                    case "help": handler.DisplayHelp(); break;
+                    case "filter": handler.FilterStr = arguments[1]??"";
+                                   handler.DisplayProcesses();
+                                    break;
+                    case "kill": handler.KillTheProccesses(arguments[1]);
+                                    break;
+                    default : handler.DisplayHelp(); break;
+
+                }
+            
             Console.ReadKey();
         }
     }
